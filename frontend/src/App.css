@@ -1,0 +1,25 @@
+@media print {
+  /* Ocultar todo excepto el carnet */
+  body * {
+    visibility: hidden;
+  }
+
+  .card {
+    visibility: visible;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  /* Quita el footer al imprimir */
+  .card-footer {
+    display: none !important;
+  }
+
+  /* Fondo blanco limpio */
+  .card {
+    box-shadow: none !important;
+    background: white !important;
+  }
+}
