@@ -38,33 +38,36 @@ export default function Sidebar() {
       {/* Footer del Sidebar */}
       <hr className="text-secondary"/>
       <Nav variant="pills" className="flex-column">
-        <SidebarLink to="/configuracion" icon={<FaCogs />} label={"Configuracion"}
+        <SidebarLink to="/configuracion" icon={<FaCogs />} label="Configuración" />
+        <SidebarLink to="/usuarios" icon={<FaUsers />} label="Usuarios" />
+        <SidebarLink to="/logout" icon={<FaSignOutAlt />} label="Cerrar sesión" isDanger={true} />
       </Nav>
     </div>
   );
 }
 
-function SidebarLink({ to, icon, label, textColor = "text-light" }) {
+function SidebarLink({ to, icon, label, isDanger = false }) {
+  const baseClasses = "d-flex align-items-center gap-2 p-2 rounded-3 text-decoration-none";
+  const dangerClasses = "text-danger hover-bg-danger";
+  const normalClasses = "text-white-50 hover-bg-primary";
   return (
     <Nav.Link
       as={NavLink}
       to={to}
       end
-      className={`mb-2 ${textColor}`}
-      style={({ isActive }) => ({
-        backgroundColor: isActive ? '#0d6efd' : 'transparent',
-        color: isActive ? 'white' : 'lightgray',
-        borderRadius: '8px',
-        padding: '10px 12px',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '10px',
-        textDecoration: 'none',
-        fontWeight: isActive ? 'bold' : 'normal',
-        transition: 'all 0.2s ease',
-      })}
+      className={({ isActive }) =>
+        [
+          baseClasses,
+          "mb-1",
+          isActive && !isDanger ? "bg-primary text-white" : "",
+          isDanger ? dangerClasses : normalClasses,
+        ]
+        .filter(Boolean)
+        .join(" ")
+      }
     >
       {icon} {label}
     </Nav.Link>
   );
+
 }
