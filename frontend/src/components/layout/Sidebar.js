@@ -21,7 +21,7 @@ const SidebarLink = ({to, icon, label, isDanger = false}) => {
     if (isDanger) {
       textClass = "text-danger";
     } else if (isActive) {
-      activeBgClass = "bg-primary text-white";
+      activeBgClass = "bg-light text-dark";
     } else {
       textClass = 'text-white-50';
     }
@@ -79,6 +79,8 @@ const Sidebar = () => {
         <SidebarLink to="/asistencias" icon={<FaCalendarCheck />} label="Asistencias" />
         <SidebarLink to="/areas" icon={<FaBuilding />} label="Áreas" />
         <SidebarLink to="/reportes" icon={<FaChartLine />} label="Reportes" />
+        <SidebarLink to="/configuracion" icon={<FaCogs />} label="Configuración" />
+        <SidebarLink to="/usuarios" icon={<FaUsers />} label="Usuarios" />
       </Nav>
 
       {/* Separador */}
@@ -86,8 +88,6 @@ const Sidebar = () => {
 
       {/* Menú de configuración y cierre de sesión */}
       <Nav variant="pills" className="flex-column">
-        <SidebarLink to="/configuracion" icon={<FaCogs />} label="Configuración" />
-        <SidebarLink to="/usuarios" icon={<FaUsers />} label="Usuarios" />
         <SidebarLink to="/logout" icon={<FaSignOutAlt />} label="Cerrar sesión" isDanger />
       </Nav>
     </div>
