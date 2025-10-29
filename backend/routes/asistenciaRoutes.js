@@ -16,16 +16,27 @@ router.post('/', async (req, res) => {
     await conn.beginTransaction();
 
     // Buscar trabajador por QR y obtener su horario
-    const [workers] = await conn.execute(`
-      SELECT 
-        t.id, 
-        t.estado,
-        h.hora_entrada,
-        h.dias_laborales
-      FROM trabajadores t
-      LEFT JOIN horarios h ON t.id_horario = h.id
-      WHERE t.codigo_qr = ? AND t.estado = 'activo'
-    `, [codigo_qr]);
+    const [rows] = await db.execute(`
+  SELECT 
+    r.id,
+    t.dni,
+    CONCAT(t.nombres, ' ', t.apellidos) AS nombre_completo,
+    h.nombre_turno AS horario,  -- ← Clave para mostrar el nombre del horario
+    r.fecha,
+    r.hora_entrada,
+    r.hora_salida,
+    r.minutos_tardanza,
+    r.estado,
+    r.metodo_registro
+  FROM registros_asistencia r
+  INNER JOIN trabajadores t ON r.trabajador_id = t.id
+  LEFT JOIN horarios h ON t.id_horario = h.id
+  WHERE 1=1
+  ${fecha_inicio ? ' AND r.fecha >= ?' : ''}
+  ${fecha_fin ? ' AND r.fecha <= ?' : ''}
+  ${dni ? ' AND t.dni LIKE ?' : ''}
+  ORDER BY r.fecha DESC, r.hora_entrada DESC
+`);
 
     if (workers.length === 0) {
       return res.status(404).json({ error: 'Trabajador no encontrado, inactivo o sin horario asignado' });
@@ -37,9 +48,9 @@ router.post('/', async (req, res) => {
 
     // Verificar si es día laborable
     const diaSemana = new Date().getDay() || 7; // 1=Lunes, 7=Domingo
-    const diasLaborales = trabajador.dias_laborales 
+    const diasLaborales = trabajador.dias_laborales
       ? JSON.parse(trabajador.dias_laborales)
-      : [1,2,3,4,5];
+      : [1, 2, 3, 4, 5];
 
     if (!diasLaborales.includes(diaSemana)) {
       return res.status(400).json({ error: 'Hoy no es día laborable para este trabajador' });
