@@ -19,7 +19,7 @@ def main():
     # Iniciar cámara
     cap = cv2.VideoCapture(CAMERA_INDEX)
     if not cap.isOpened():
-        print("❌ Error: No se pudo acceder a la cámara.")
+        print(" Error: No se pudo acceder a la cámara.")
         sys.exit(1)
 
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
