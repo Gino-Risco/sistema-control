@@ -16,33 +16,29 @@ export default function Sidebar() {
   return (
     <div
       className="d-flex flex-column p-3 bg-dark text-white"
-      style={{
-        width: '250px',
-        height: '100vh',
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        zIndex: 1000,
+      style={{ width: '250px', height: '100vh', position: 'fixed', top: 0, left: 0, zIndex: 1030,
       }}
     >
       {/* Logo / Título */}
-      <div className="text-center mb-4">
-        <Image src="/images/logo.png" roundedCircle width="80" height="80" alt="Logo" />
-        <h5 className="mt-2">Control de Asistencia</h5>
-      </div>
+      <NavLink to="/" className="d-flex align-items-center mb-4 text-white text-decoration-none">
+        <Image src="/images/logo.png" width="40" height="40" alt="Logo" className="me-2"/>
+        <span className="fs-5 fw-bold">Control Asistencia</span>
+      </NavLink>
 
       {/* Menú lateral */}
-      <Nav className="flex-column">
+      <Nav variant="pills" className="flex-column mb-auto">
         <SidebarLink to="/" icon={<FaHome />} label="Dashboard" />
         <SidebarLink to="/trabajadores" icon={<FaUsers />} label="Trabajadores" />
         <SidebarLink to="/asignacion-horarios" icon={<FaCalendarAlt />} label="Asignación de Horarios" />
         <SidebarLink to="/asistencias" icon={<FaCalendarCheck />} label="Asistencias" />
         <SidebarLink to="/areas" icon={<FaBuilding />} label="Áreas" />
         <SidebarLink to="/reportes" icon={<FaChartLine />} label="Reportes" />
-        <SidebarLink to="/usuarios" icon={<FaUsers />} label="Usuarios" />
-        <SidebarLink to="/configuracion" icon={<FaCogs />} label="Configuración" />
-        <hr />
-        <SidebarLink to="#" icon={<FaSignOutAlt />} label="Cerrar sesión" textColor="text-danger" />
+      </Nav>
+
+      {/* Footer del Sidebar */}
+      <hr className="text-secondary"/>
+      <Nav variant="pills" className="flex-column">
+        <SidebarLink to="/configuracion" icon={<FaCogs />} label={"Configuracion"}
       </Nav>
     </div>
   );
