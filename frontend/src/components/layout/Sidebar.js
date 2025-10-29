@@ -16,28 +16,26 @@ import './Sidebar.css';
 const SidebarLink = ({to, icon, label, isDanger = false}) => {
   const getLinkClasses = ({ isActive}) => {
     const baseClasses = "d-flex align-items-center gap-2 p-2 rounded-3 text-decoration-none mb-1";
-    let textClass = "text-white-50";
+    let textClass = "text-white";
     let activeBgClass = "";
     if (isDanger) {
       textClass = "text-danger";
     } else if (isActive) {
-      activeBgClass = "bg-white bg-opacity-10 text-white";
-    } else {
-      textClass = 'text-white-50';
+      activeBgClass = "bg-white bg-opacity-10";
     }
     return [baseClasses, textClass, activeBgClass].filter(Boolean).join(" ");
   };
   return (
-    <Nav.Link
-      as={NavLink}
-      to={to}
-      end
-      className={getLinkClasses}
-      aria-label={label}
-    >
-      {icon} <span className="ms-1">{label}</span>
-    </Nav.Link>
-  );
+  <Nav.Link
+    as={NavLink}
+    to={to}
+    end
+    className={`${getLinkClasses} sidebar-link`}
+    aria-label={label}
+  >
+    {icon} <span className="ms-1">{label}</span>
+  </Nav.Link>
+);
 };
 
 const Sidebar = () => {
@@ -72,7 +70,7 @@ const Sidebar = () => {
       </NavLink>
 
       {/* Menú principal */}
-      <Nav className="flex-column mb-auto">
+      <Nav variant="pills" className="flex-column mb-auto">
         <SidebarLink to="/" icon={<FaHome />} label="Dashboard" />
         <SidebarLink to="/trabajadores" icon={<FaUsers />} label="Trabajadores" />
         <SidebarLink to="/asignacion-horarios" icon={<FaCalendarAlt />} label="Asignación de Horarios" />
@@ -87,7 +85,7 @@ const Sidebar = () => {
       <hr className="text-secondary my-2" />
 
       {/* Menú de configuración y cierre de sesión */}
-      <Nav className="flex-column">
+      <Nav variant="pills" className="flex-column">
         <SidebarLink to="/logout" icon={<FaSignOutAlt />} label="Cerrar sesión" isDanger />
       </Nav>
     </div>
