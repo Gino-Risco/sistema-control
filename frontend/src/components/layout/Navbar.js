@@ -23,12 +23,19 @@ export default function Navbar() {
             <Dropdown align="end">
               <Dropdown.Toggle as={Nav.Link} className="d-flex align-items-center p-0">
                 <Image src={user.avatar} roundedCircle className="me-2"/>
-                <span className="d-none d-md-inline text-dark">{user.name</span>
+                <span className="d-none d-md-inline text-dark">{user.name}</span>
               </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item href="#profile">Perfil</Dropdown.Item>
+              <Dropdown.Menu className="border-0 shadow-lg rounded-3 mt-2">
+                <Dropdown.Item href="#profile" className="d-flex align-items-center gap-2 py-2">
+                  <FaUserCircle /> Perfil
+                </Dropdown.Item>
+                <Dropdown.Item href="/configuracion" className="d-flex align-items-center gap-2 py-2">
+                  <FaCog className="text-muted" /> Configuración
+                </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item href="#logout" className="text-danger">Cerrar sesión</Dropdown.Item>
+                <Dropdown.Item href="#logout" className="text-danger d-flex align-items-center gap-2 py-2">
+                  <FaSignOutAlt /> Cerrar sesión
+                </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           </Nav>
