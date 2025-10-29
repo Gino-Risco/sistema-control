@@ -4,6 +4,10 @@ import { Navbar as BootstrapNavbar, Container, Nav, Dropdown, Image } from 'reac
 import { FaUserCircle, FaCog, FaSignOutAlt } from 'react-icons/fa';
 
 export default function Navbar() {
+  const user = {
+    name: 'Usuario Admin',
+    avatar: 'https://via.placeholder.com/40' // se puede reemplazar con la foto real del usuario
+  }
   return (
     <BootstrapNavbar 
       bg="light" 
