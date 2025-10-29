@@ -125,5 +125,53 @@ router.patch('/:id/estado', async (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
+// PATCH /api/workers/:id → editar trabajador (con foto opcional)
+router.patch('/:id', upload.single('foto'), async (req, res) => {
+  const { dni, nombres, apellidos, email, id_area } = req.body;
+  const trabajadorId = req.params.id;
+
+  if (!dni || !nombres || !apellidos || !id_area) {
+    return res.status(400).json({ error: 'DNI, nombres, apellidos y área son requeridos' });
+  }
+
+  const conn = await db.getConnection();
+  try {
+    await conn.beginTransaction();
+
+    // Obtener datos actuales del trabajador
+    const [current] = await conn.execute(
+      `SELECT foto FROM trabajadores WHERE id = ?`,
+      [trabajadorId]
+    );
+
+    if (current.length === 0) {
+      return res.status(404).json({ error: 'Trabajador no encontrado' });
+    }
+
+    // Manejar la foto
+    let fotoPath = current[0].foto; // Mantener la foto actual si no se sube nueva
+    if (req.file) {
+      // Si se sube nueva foto, eliminar la anterior (opcional)
+      fotoPath = `/uploads/${req.file.filename}`;
+    }
+
+    // Actualizar trabajador
+    await conn.execute(
+      `UPDATE trabajadores 
+       SET dni = ?, nombres = ?, apellidos = ?, email = ?, id_area = ?, foto = ?
+       WHERE id = ?`,
+      [dni, nombres, apellidos, email, id_area, fotoPath, trabajadorId]
+    );
+
+    await conn.commit();
+    res.json({ message: 'Trabajador actualizado exitosamente' });
+  } catch (error) {
+    await conn.rollback();
+    console.error('Error al editar trabajador:', error);
+    res.status(500).json({ error: 'Error al actualizar trabajador' });
+  } finally {
+    conn.release();
+  }
+});
 
 module.exports = router;

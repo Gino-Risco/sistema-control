@@ -8,7 +8,7 @@ import time
 import sys
 
 # Configuración
-BACKEND_URL = "http://localhost:5000/api/asistencia"  # Ajusta si el backend está en otra IP
+BACKEND_URL = "http://localhost:5000/api/asistencia"  
 CAMERA_INDEX = 0  
 
 def main():
@@ -22,12 +22,11 @@ def main():
         print("❌ Error: No se pudo acceder a la cámara.")
         sys.exit(1)
 
-    # Reducir resolución para mejor rendimiento
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
     last_scan_time = 0
-    cooldown = 3  # segundos entre escaneos
+    cooldown = 3  
 
     while True:
         ret, frame = cap.read()
@@ -35,14 +34,13 @@ def main():
             print("❌ Error al capturar el frame.")
             break
 
-        # Detectar y decodificar QR
         detector = cv2.QRCodeDetector()
         data, bbox, _ = detector.detectAndDecode(frame)
 
         current_time = time.time()
 
         if bbox is not None:
-            # Dibujar cuadro alrededor del QR
+            
             bbox = bbox[0].astype(int)
             for i in range(len(bbox)):
                 pt1 = tuple(bbox[i])
@@ -53,7 +51,6 @@ def main():
                 print(f"✅ QR detectado: {data}")
                 
                 try:
-                    # Enviar al backend
                     response = requests.post(
                         BACKEND_URL,
                         json={"codigo_qr": data},
@@ -77,7 +74,6 @@ def main():
 
                 last_scan_time = current_time
 
-        # Mostrar instrucciones
         cv2.putText(frame, "Escanea tu QR | Presiona 'q' para salir", 
                     (10, frame.shape[0] - 10), 
                     cv2.FONT_HERSHEY_SIMPLEX, 
@@ -85,11 +81,9 @@ def main():
 
         cv2.imshow('Sistema de Asistencia - Escáner QR', frame)
 
-        # Salir con 'q'
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    # Limpiar
     cap.release()
     cv2.destroyAllWindows()
     print("\n👋 Sistema detenido.")

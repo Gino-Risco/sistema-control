@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Modal, Form, Button, Row, Col } from 'react-bootstrap';
 import WorkerCard from './WorkerCard';
 
+
 export default function WorkerModal({ show, onClose, onSave, areas }) {
   const [formData, setFormData] = useState({
     dni: '',

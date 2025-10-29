@@ -3,7 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { Container, Card, Button, Table, Image } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import WorkerModal from '../components/workers/WorkerModal';
+import WorkerEditModal from '../components/workers/WorkerEditModal';
 import WorkerCard from '../components/workers/WorkerCard';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+
 import workerApi from '../api/workerApi';
 
 export default function WorkersPage() {
@@ -12,6 +15,10 @@ export default function WorkersPage() {
   const [showModal, setShowModal] = useState(false);
   const [selectedWorker, setSelectedWorker] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingWorker, setEditingWorker] = useState(null);
 
   const loadWorkers = async () => {
     try {
@@ -36,7 +43,7 @@ export default function WorkersPage() {
     }
   };
 
-  // Cambiar estado de trabajador (activo/inactivo)
+ 
   const toggleEstado = async (id, estadoActual) => {
     const nuevoEstado = estadoActual === 'activo' ? 'inactivo' : 'activo';
     const action = nuevoEstado === 'activo' ? 'activar' : 'inactivar';
@@ -77,6 +84,11 @@ export default function WorkersPage() {
     }
   };
 
+  const handleEdit = (worker) => {
+    setEditingWorker(worker);
+    setShowEditModal(true);
+  };
+
   useEffect(() => {
     loadWorkers();
   }, []);
@@ -87,24 +99,37 @@ export default function WorkersPage() {
         <WorkerCard
           worker={selectedWorker}
           onPrint={() => window.print()}
-          onEmail={() => Swal.fire('Info', 'Función de envío por correo no implementada', 'info')}
+          onEmail={() =>
+            Swal.fire('Info', 'Función de envío por correo no implementada', 'info')
+          }
           onBack={() => setSelectedWorker(null)}
         />
       ) : (
         <>
-          <Card>
-            <Card.Header className="d-flex justify-content-between align-items-center">
+          <Card className="shadow border-0 rounded-4">
+            <Card.Header className="d-flex justify-content-between align-items-center bg-primary text-white rounded-top-4">
               <h4 className="mb-0">Gestión de Trabajadores</h4>
-              <Button variant="success" onClick={() => setShowModal(true)}>
-                + Nuevo Trabajador
+              <Button
+                variant="primary"
+                className="d-flex align-items-center gap-2 shadow-sm px-3 py-2 rounded-pill fw-semibold"
+                onClick={() => setShowModal(true)}
+                style={{
+                  background: 'linear-gradient(90deg, #179240ff, #15ac72ff)',
+                  border: 'none',
+                }}
+              >
+                <i className="bi bi-person-plus-fill"></i>
+                Nuevo Trabajador
               </Button>
+
+
             </Card.Header>
             <Card.Body>
               {loading ? (
                 <div className="text-center py-4">Cargando...</div>
               ) : (
-                <Table responsive striped hover>
-                  <thead>
+                <Table responsive hover className="align-middle">
+                  <thead className="table-light">
                     <tr>
                       <th>Foto</th>
                       <th>DNI</th>
@@ -118,16 +143,21 @@ export default function WorkersPage() {
                   <tbody>
                     {workers.length === 0 ? (
                       <tr>
-                        <td colSpan="7" className="text-center">No hay trabajadores</td>
+                        <td colSpan="7" className="text-center">
+                          No hay trabajadores
+                        </td>
                       </tr>
                     ) : (
-                      workers.map(worker => (
+                      workers.map((worker) => (
                         <tr key={worker.id}>
                           <td>
                             <Image
                               src={
                                 worker.foto
-                                  ? `http://localhost:5000${worker.foto.startsWith('/') ? worker.foto : '/' + worker.foto}`
+                                  ? `http://localhost:5000${worker.foto.startsWith('/')
+                                    ? worker.foto
+                                    : '/' + worker.foto
+                                  }`
                                   : 'https://via.placeholder.com/50?text=Avatar'
                               }
                               roundedCircle
@@ -135,41 +165,47 @@ export default function WorkersPage() {
                               height={50}
                               className="border"
                             />
-
-
-
                           </td>
 
                           <td>{worker.dni}</td>
-                          <td>{worker.nombres} {worker.apellidos}</td>
+                          <td>
+                            {worker.nombres} {worker.apellidos}
+                          </td>
                           <td>{worker.nombre_area}</td>
                           <td>
                             {worker.qrImage ? (
-                              <img src={worker.qrImage} alt="QR" width="70" className="border p-1 rounded" />
-                            ) : '—'}
+                              <img
+                                src={worker.qrImage}
+                                alt="QR"
+                                width="70"
+                                className="border p-1 rounded"
+                              />
+                            ) : (
+                              '—'
+                            )}
                           </td>
                           <td>
                             <Button
                               size="sm"
                               style={{
-                                backgroundColor: worker.estado === 'activo' ? '#28a745' : '#dc3545', // verde / rojo
+                                backgroundColor:
+                                  worker.estado === 'activo'
+                                    ? '#28a745'
+                                    : '#dc3545',
                                 border: 'none',
                                 color: 'white',
                                 fontWeight: '500',
                                 width: '90px',
-                                padding: '4px 8px',
-                                fontSize: '0.85rem',
                                 borderRadius: '12px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                gap: '5px',
-                                lineHeight: '1.2',
                                 transition: 'background-color 0.3s ease'
                               }}
-                              onClick={() => toggleEstado(worker.id, worker.estado)}
+                              onClick={() =>
+                                toggleEstado(worker.id, worker.estado)
+                              }
                             >
-                              {worker.estado === 'activo' ? 'Activo' : 'Inactivo'}
+                              {worker.estado === 'activo'
+                                ? 'Activo'
+                                : 'Inactivo'}
                             </Button>
                           </td>
 
@@ -182,8 +218,12 @@ export default function WorkersPage() {
                             >
                               Ver Carnet
                             </Button>
-                            <Button size="sm" variant="outline-warning">
-                              Editar
+                            <Button
+                              size="sm"
+                              variant="outline-warning"
+                              onClick={() => handleEdit(worker)}
+                            >
+                              ✏️ Editar
                             </Button>
                           </td>
                         </tr>
@@ -195,10 +235,20 @@ export default function WorkersPage() {
             </Card.Body>
           </Card>
 
+          {/*  Modal de nuevo trabajador */}
           <WorkerModal
             show={showModal}
             onClose={() => setShowModal(false)}
             onSave={handleSaveWorker}
+            areas={areas}
+          />
+
+          {/*  Modal de edición */}
+          <WorkerEditModal
+            show={showEditModal}
+            onClose={() => setShowEditModal(false)}
+            worker={editingWorker}
+            onSave={loadWorkers}
             areas={areas}
           />
         </>

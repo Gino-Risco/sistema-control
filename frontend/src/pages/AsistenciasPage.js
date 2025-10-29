@@ -11,10 +11,10 @@ import {
     Spinner,
     Modal
 } from 'react-bootstrap';
-import workerApi from '../api/workerApi'; // Para cargar lista de trabajadores
+import workerApi from '../api/workerApi'; 
 
 export default function AsistenciasPage() {
-    // Filtros
+    
     const [fechaInicio, setFechaInicio] = useState(() => {
         const hoy = new Date();
         const primerDia = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
@@ -26,21 +26,21 @@ export default function AsistenciasPage() {
     });
     const [dniBusqueda, setDniBusqueda] = useState('');
 
-    // Datos de asistencia
+    
     const [asistencias, setAsistencias] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Modal de registro manual
+    
     const [showRegistroModal, setShowRegistroModal] = useState(false);
     const [trabajadores, setTrabajadores] = useState([]);
     const [registroForm, setRegistroForm] = useState({
         trabajador_id: '',
         fecha: new Date().toISOString().split('T')[0],
-        hora_entrada: new Date().toTimeString().split(' ')[0].slice(0, 5) // HH:mm
+        hora_entrada: new Date().toTimeString().split(' ')[0].slice(0, 5) 
     });
 
-    // Cargar asistencias desde el backend
+    
     const fetchAsistencias = async () => {
         setLoading(true);
         setError(null);
@@ -62,7 +62,7 @@ export default function AsistenciasPage() {
         }
     };
 
-    // Cargar lista de trabajadores para el modal
+    
     const loadTrabajadores = async () => {
         try {
             const response = await workerApi.get('/');
@@ -72,7 +72,7 @@ export default function AsistenciasPage() {
         }
     };
 
-    // Registrar entrada manual
+   
     const handleGuardarRegistro = async () => {
         if (!registroForm.trabajador_id) {
             alert('Por favor seleccione un trabajador');
@@ -95,25 +95,25 @@ export default function AsistenciasPage() {
                 throw new Error(errorData.error || 'Error desconocido');
             }
 
-            alert('✅ Entrada registrada exitosamente');
+            alert(' Entrada registrada exitosamente');
             setShowRegistroModal(false);
             setRegistroForm({
                 trabajador_id: '',
                 fecha: new Date().toISOString().split('T')[0],
                 hora_entrada: new Date().toTimeString().split(' ')[0].slice(0, 5)
             });
-            fetchAsistencias(); // Recargar tabla
+            fetchAsistencias(); 
         } catch (err) {
             alert('❌ Error al registrar entrada: ' + err.message);
         }
     };
 
-    // Efecto inicial
+    
     useEffect(() => {
         fetchAsistencias();
     }, []);
 
-    // Renderizado de estado con badge
+    
     const renderEstado = (estado) => {
         const config = {
             puntual: { variant: 'success', label: 'Puntual' },

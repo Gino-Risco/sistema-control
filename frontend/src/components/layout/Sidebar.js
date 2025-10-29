@@ -8,6 +8,7 @@ import {
   FaBuilding,
   FaChartLine,
   FaCogs,
+  FaCalendarAlt,
   FaSignOutAlt
 } from 'react-icons/fa';
 
@@ -26,7 +27,7 @@ export default function Sidebar() {
     >
       {/* Logo / Título */}
       <div className="text-center mb-4">
-        <Image src="https://via.placeholder.com/60?text=LOGO" roundedCircle />
+        <Image src="/images/logo.png" roundedCircle width="80" height="80" alt="Logo" />
         <h5 className="mt-2">Control de Asistencia</h5>
       </div>
 
@@ -34,6 +35,7 @@ export default function Sidebar() {
       <Nav className="flex-column">
         <SidebarLink to="/" icon={<FaHome />} label="Dashboard" />
         <SidebarLink to="/trabajadores" icon={<FaUsers />} label="Trabajadores" />
+        <SidebarLink to="/asignacion-horarios" icon={<FaCalendarAlt />} label="Asignación de Horarios" />
         <SidebarLink to="/asistencias" icon={<FaCalendarCheck />} label="Asistencias" />
         <SidebarLink to="/areas" icon={<FaBuilding />} label="Áreas" />
         <SidebarLink to="/reportes" icon={<FaChartLine />} label="Reportes" />
@@ -46,7 +48,6 @@ export default function Sidebar() {
   );
 }
 
-/* 🔹 Componente pequeño para cada enlace con estilo dinámico */
 function SidebarLink({ to, icon, label, textColor = "text-light" }) {
   return (
     <Nav.Link
@@ -55,7 +56,7 @@ function SidebarLink({ to, icon, label, textColor = "text-light" }) {
       end
       className={`mb-2 ${textColor}`}
       style={({ isActive }) => ({
-        backgroundColor: isActive ? '#0d6efd' : 'transparent', // azul Bootstrap
+        backgroundColor: isActive ? '#0d6efd' : 'transparent',
         color: isActive ? 'white' : 'lightgray',
         borderRadius: '8px',
         padding: '10px 12px',
