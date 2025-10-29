@@ -10,19 +10,20 @@ export default function Navbar() {
   }
   return (
     <BootstrapNavbar 
-      bg="light" 
+      bg="white" 
       expand="lg" 
       className="shadow-sm"
-      style={{ position: 'fixed', top: 0, left: '250px', right: 0, zIndex: 1000 }} // ← Ajuste clave
+      style={{ position: 'fixed', top: 0, left: '250px', right: 0, zIndex: 1020 }} 
     >
-      <Container>
-        <BootstrapNavbar.Brand href="#home">Sistema de Control de Asistencia</BootstrapNavbar.Brand>
+      <Container fluid className="px-4">
+        <BootstrapNavbar.Brand href="/" className="fw-bold text-primary">Sistema de Control de Asistencia</BootstrapNavbar.Brand>
         <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav" />
         <BootstrapNavbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
             <Dropdown align="end">
-              <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">
-                <FaUser /> Usuario
+              <Dropdown.Toggle as={Nav.Link} className="d-flex align-items-center p-0">
+                <Image src={user.avatar} roundedCircle className="me-2"/>
+                <span className="d-none d-md-inline text-dark">{user.name</span>
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item href="#profile">Perfil</Dropdown.Item>
