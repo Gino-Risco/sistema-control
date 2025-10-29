@@ -1,7 +1,7 @@
 // frontend/src/components/layout/Navbar.js
 import React from 'react';
-import { Navbar as BootstrapNavbar, Container, Nav, Dropdown } from 'react-bootstrap';
-import { FaUser } from 'react-icons/fa';
+import { Navbar as BootstrapNavbar, Container, Nav, Dropdown, Image } from 'react-bootstrap';
+import { FaUserCircle, FaCog, FaSignOutAlt } from 'react-icons/fa';
 
 export default function Navbar() {
   return (
